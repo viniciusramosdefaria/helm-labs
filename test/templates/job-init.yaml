@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "test.fullname" . }}-server-acl-init
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "test.name" . }}
+    chart: {{ template "test.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+  annotations:
+    "helm.sh/hook": post-install,post-upgrade
+    "helm.sh/hook-weight": "0"
+    # If the hook fails then all that happens is we didn't delete the job.
+    # There's no reason for *this* job to stay around in that case so delete
+    # regardless of success.
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  template:
+    metadata:
+      name: {{ template "test.fullname" . }}-server-acl-init
+      labels:
+        app: {{ template "test.name" . }}
+        chart: {{ template "test.chart" . }}
+        release: {{ .Release.Name }}
+        component: server-acl-init
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: post-install-job
+          image: {{ .Values.init.image }}:{{ .Values.init.tag }}
+          command:
+            - "/bin/sh"
+            - "-ec"
+            - |
+              echo "test"
+              sleep 30
+          resources:
+            requests:
+              memory: "25Mi"
+              cpu: "50m"
+            limits:
+              memory: "25Mi"
+              cpu: "50m"
