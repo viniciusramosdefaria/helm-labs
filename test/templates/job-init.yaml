@@ -26,6 +26,7 @@ spec:
         component: server-acl-init
     spec:
       restartPolicy: Never
+      serviceAccountName: {{ template "test.fullname" . }}-server-acl-init
       containers:
         - name: post-install-job
           image: {{ .Values.init.image }}:{{ .Values.init.tag }}

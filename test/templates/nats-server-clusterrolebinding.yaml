@@ -1,8 +1,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
-kind: RoleBinding
+kind: ClusterRoleBinding
 metadata:
-  name: {{ template "test.fullname" . }}-server-acl-init-cleanup
-  namespace: {{ .Release.Namespace }}
+  name: {{ template "test.fullname" . }}-nats-server-binding
   labels:
     app: {{ template "test.name" . }}
     chart: {{ template "test.chart" . }}
@@ -10,8 +9,9 @@ metadata:
     release: {{ .Release.Name }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
-  kind: Role
-  name: {{ template "test.fullname" . }}-server-acl-init-cleanup
+  kind: ClusterRole
+  name: {{ template "test.fullname" . }}-nats-server
 subjects:
   - kind: ServiceAccount
-    name: {{ template "test.fullname" . }}-server-acl-init-cleanup
+    name: {{ template "test.fullname" . }}-nats-server
+    namespace: {{ .Release.Namespace }}

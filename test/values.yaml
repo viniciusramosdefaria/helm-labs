@@ -14,7 +14,7 @@ service:
   port: 80
 
 vault:
-  enabled: true
+  enabled: false
 
 ingress:
   enabled: false

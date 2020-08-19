@@ -1,0 +1,13 @@
+apiVersion: nats.io/v1alpha2
+kind: NatsServiceRole
+metadata:
+  name: {{ template "test.fullname" . }}-nats-admin-user
+  namespace: {{ .Release.Namespace }}
+
+  # Specifies which NATS cluster will be mapping this account.
+  labels:
+    nats_cluster: {{ template "test.fullname" . }}-nats
+spec:
+  permissions:
+    publish: [">"]
+    subscribe: [">"]
