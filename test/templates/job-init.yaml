@@ -8,13 +8,6 @@ metadata:
     chart: {{ template "test.chart" . }}
     heritage: {{ .Release.Service }}
     release: {{ .Release.Name }}
-  annotations:
-    "helm.sh/hook": post-install,post-upgrade
-    "helm.sh/hook-weight": "0"
-    # If the hook fails then all that happens is we didn't delete the job.
-    # There's no reason for *this* job to stay around in that case so delete
-    # regardless of success.
-    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
 spec:
   template:
     metadata:

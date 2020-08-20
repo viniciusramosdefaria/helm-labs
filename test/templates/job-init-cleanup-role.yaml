@@ -1,0 +1,14 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "test.fullname" . }}-server-acl-init-cleanup
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: {{ template "test.name" . }}
+    chart: {{ template "test.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+rules:
+  - apiGroups: ["batch"]
+    resources: ["jobs"]
+    verbs: ["get", "delete"]

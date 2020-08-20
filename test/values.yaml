@@ -13,9 +13,6 @@ service:
   type: ClusterIP
   port: 80
 
-vault:
-  enabled: false
-
 ingress:
   enabled: false
   annotations: {}
@@ -50,3 +47,41 @@ affinity: {}
 init:
   image: alpine
   tag: latest
+
+vault:
+  injector:
+    enabled: false
+  server:
+    dataStorage:
+      enabled: true
+      size: 10Gi
+    standalone:
+      enabled: false
+    ha:
+      enabled: true
+      replicas: 2
+      raft:
+        enabled: true
+        config: |
+          ui = false
+
+          listener "tcp" {
+            tls_disable = 1
+            address = "[::]:8200"
+            cluster_address = "[::]:8201"
+          }
+          storage "raft" {
+            path = "/vault/data"
+          }
+
+          service_registration "kubernetes" {}
+
+consul:
+  server:
+    enabled: true
+    storage: 10Gi
+  global:
+    enabled: false
+    acls:
+      manageSystemACLs: true
+      createReplicationToken: true

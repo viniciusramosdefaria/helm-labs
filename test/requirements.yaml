@@ -1,6 +1,7 @@
 dependencies:
-
   - name: vault
     version: "0.6.0"
     repository: https://helm.releases.hashicorp.com
-    condition: vault.enabled
+  - name: consul
+    version: "0.24.1"
+    repository: https://helm.releases.hashicorp.com
